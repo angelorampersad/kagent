@@ -89,6 +89,28 @@ tests:
           path: spec.model
           value: "gpt-4-turbo"
 
+  - it: should render provider-specific config under the documented config key
+    set:
+      providers:
+        openAI:
+          config:
+            baseUrl: "https://self-hosted.example.com/v1"
+    asserts:
+      - equal:
+          path: spec.openAI.baseUrl
+          value: "https://self-hosted.example.com/v1"
+
+  - it: should also accept provider-specific config nested under the provider's own key
+    set:
+      providers:
+        openAI:
+          openAI:
+            baseUrl: "https://self-hosted.example.com/v1"
+    asserts:
+      - equal:
+          path: spec.openAI.baseUrl
+          value: "https://self-hosted.example.com/v1"
+
   - it: should render provider tls configuration
     set:
       providers:

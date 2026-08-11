@@ -35,9 +35,16 @@ spec:
   tls:
     {{- toYaml $model.tls | nindent 4 }}
   {{- end }}
+  {{- $providerConfig := dict }}
   {{- if $model.config }}
+  {{- $providerConfig = merge $providerConfig $model.config }}
+  {{- end }}
+  {{- if hasKey $model $defaultProvider }}
+  {{- $providerConfig = merge $providerConfig (index $model $defaultProvider) }}
+  {{- end }}
+  {{- if $providerConfig }}
   {{ $defaultProvider }}:
-  {{- toYaml $model.config | nindent 4 }}
+  {{- toYaml $providerConfig | nindent 4 }}
   {{- end }}
   {{- end }}
 {{- end }}
